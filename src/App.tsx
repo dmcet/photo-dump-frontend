@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {HomePage} from "./pages/HomePage.tsx";
+import {BrowserRouter, NavLink, Routes, Route} from "react-router-dom";
 
 const Page = {
     Home: 'Home',
@@ -6,27 +7,42 @@ const Page = {
     ViewImages: 'View Images'
 } as const;
 
-type Page = typeof Page[keyof typeof Page];
+const AppRoutes = {
+    Home: {
+        path: '/',
+        component: HomePage
+    }
+} as const;
 
 
 export default function App() {
-    const [currentPage, setCurrentPage] = useState<Page>(Page.Home)
 
     return (
-        <>
+        <BrowserRouter>
             <h1 className="m-3">Welcome to PhotoDump</h1>
 
             <nav className="nav nav-pills nav-fill m-3">
-                {Object.values(Page).map(page => (
-                    <a
-                        key={page}
-                        className={"nav-link" + (currentPage === page ? " active" : "")}
-                        aria-current="page"
-                        onClick={() => setCurrentPage(page)}
-                        href="#">{page}
-                    </a>
+                {Object.entries(AppRoutes).map(([name, { path }]) => (
+                    <NavLink
+                        key={path}
+                        to={path}
+                        className={({ isActive }) =>
+                            `nav-link ${isActive ? 'active' : ''}`
+                        }
+                    >
+                        {Page[name as keyof typeof Page]}
+                    </NavLink>
                 ))}
+
             </nav>
-        </>
+
+            <Routes>
+                {Object.values(AppRoutes).map(({ path, component: Component }) => (
+                    <Route key={path} path={path} element={<Component />} />
+                ))}
+            </Routes>
+
+
+        </BrowserRouter>
     )
 }
