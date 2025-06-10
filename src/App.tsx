@@ -14,13 +14,13 @@ export default function App() {
 
     return (
         <>
-            <h1 className="m-3">Hello, world!</h1>
+            <h1 className="m-3">Welcome to PhotoDump</h1>
 
-            <nav className="nav nav-pills nav-fill">
+            <nav className="nav nav-pills nav-fill m-3">
                 {Object.values(Page).map(page => (
                     <a
                         key={page}
-                        className={"nav-link " + (currentPage === page ? "active" : "")}
+                        className={"nav-link" + (currentPage === page ? " active" : "")}
                         aria-current="page"
                         onClick={() => setCurrentPage(page)}
                         href="#">{page}
