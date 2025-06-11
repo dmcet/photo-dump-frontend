@@ -1,6 +1,7 @@
 import HomePage from "./pages/HomePage.tsx";
 import {BrowserRouter, NavLink, Routes, Route} from "react-router-dom";
 import UploadImagePage from "./pages/UploadImagePage.tsx";
+import ViewImagesPage from "./pages/ViewImagesPage.tsx";
 
 const Page = {
     Home: 'Home',
@@ -16,6 +17,10 @@ const AppRoutes = {
     UploadImage: {
         path: '/upload',
         component: UploadImagePage
+    },
+    ViewImages: {
+        path: '/view',
+        component: ViewImagesPage
     }
 } as const;
 
@@ -33,7 +38,7 @@ export default function App() {
                         key={path}
                         to={path}
                         className={({isActive}) =>
-                            `nav-link ${isActive ? 'active' : ''}`
+                            `nav-link m-2 ${isActive ? 'active' : ''}`
                         }
                     >
                         {Page[name as keyof typeof Page]}

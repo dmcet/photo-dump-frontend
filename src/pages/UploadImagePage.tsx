@@ -57,7 +57,6 @@ export default function UploadImagePage() {
                 )
             );
 
-
             if (results.find(result => !result.ok)) {
                 setUploadResult(UploadResult.Error);
             } else {
