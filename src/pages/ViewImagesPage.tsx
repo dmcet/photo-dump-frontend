@@ -19,17 +19,17 @@ export default function ViewImagesPage() {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div>
-            {data?.map((image) => (
-                <img
-                    key={image.id}
-                    src={"http://localhost:8080" + image.url}
-                    alt={image.name}
-                    style={
-                        {width: '200px', height: 'px', objectFit: 'cover', borderRadius: '4px', margin: '10px'}
-                    }
-                />
-            ))}
+        <div className="container text-center">
+            <div className="row row-cols-md-3">
+                {data?.map((image) => (
+                    <img
+                        key={image.id}
+                        src={"http://localhost:8080" + image.url}
+                        alt={image.name}
+                        className="img-fluid"
+                    />
+                ))}
+            </div>
         </div>
     );
 
