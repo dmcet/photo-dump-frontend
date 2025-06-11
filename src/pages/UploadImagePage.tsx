@@ -28,6 +28,26 @@ export default function UploadImagePage() {
 
     const isButtonDisabled = !files?.length;
 
+    const handleSubmitClick = () => {
+        Array.from(files as FileList).map(file => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('http://localhost:8080/api/v1/images/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(data => {
+                        console.log(data)
+                    })
+                    .catch(error => {
+                            console.error('Error:', error);
+                        }
+                    )
+            }
+        )
+    }
+
     return (
         <div className="m-3">
             <label htmlFor="uploadForm" className="form-label">Select the images you want to upload</label>
@@ -61,7 +81,7 @@ export default function UploadImagePage() {
                 </div>
 
             )}
-            <button className="btn-success" disabled={isButtonDisabled}>Submit</button>
+            <button className="btn-success" onClick={handleSubmitClick} disabled={isButtonDisabled}>Submit</button>
         </div>
     )
 }
