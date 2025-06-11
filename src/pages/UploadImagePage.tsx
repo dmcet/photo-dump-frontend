@@ -1,9 +1,19 @@
 import {type ChangeEvent, useEffect, useState} from "react";
 
+
+const UploadResult = {
+    Success: 'Success',
+    Error: 'Error'
+} as const;
+
+type UploadResult = typeof UploadResult[keyof typeof UploadResult];
+
 export default function UploadImagePage() {
     const [files, setFiles] = useState<FileList | null>(null);
     // Add this state for storing preview URLs
     const [previews, setPreviews] = useState<string[]>([]);
+
+    const [uploadResult, setUploadResult] = useState<UploadResult | null>(null);
 
 // Add this useEffect to generate previews when files change
     useEffect(() => {
@@ -28,25 +38,43 @@ export default function UploadImagePage() {
 
     const isButtonDisabled = !files?.length;
 
-    const handleSubmitClick = () => {
-        Array.from(files as FileList).map(file => {
-                const formData = new FormData();
-                formData.append('file', file);
 
-                fetch('http://localhost:8080/api/v1/images/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(data => {
-                        console.log(data)
-                    })
-                    .catch(error => {
-                            console.error('Error:', error);
-                        }
-                    )
+
+    const handleSubmitClick = async () => {
+        if (!files) return;
+
+        try {
+            const results = await Promise.all(
+                Array.from(files).map(file => {
+                        const formData = new FormData();
+                        formData.append('file', file);
+
+                        return fetch('http://localhost:8080/api/v1/images/upload', {
+                            method: 'POST',
+                            body: formData
+                        })
+                    }
+                )
+            );
+
+
+            if (results.find(result => !result.ok)) {
+                setUploadResult(UploadResult.Error);
+            } else {
+                setUploadResult(UploadResult.Success);
             }
-        )
+
+        } catch (error) {
+            console.error("Error processing files", error);
+        }
     }
+
+    const determineButtonClass: () => string = () => {
+        if (!uploadResult) return "btn btn-primary";
+
+        return "btn " + (uploadResult === UploadResult.Success ? "btn-success" : "btn-danger");
+    }
+
 
     return (
         <div className="m-3">
@@ -81,7 +109,11 @@ export default function UploadImagePage() {
                 </div>
 
             )}
-            <button className="btn-success" onClick={handleSubmitClick} disabled={isButtonDisabled}>Submit</button>
+            <button
+                type="submit"
+                className={determineButtonClass()}
+                onClick={handleSubmitClick} disabled={isButtonDisabled}>Submit
+            </button>
         </div>
     )
 }
