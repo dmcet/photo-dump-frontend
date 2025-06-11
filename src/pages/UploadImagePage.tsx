@@ -38,8 +38,6 @@ export default function UploadImagePage() {
 
     const isButtonDisabled = !files?.length;
 
-
-
     const handleSubmitClick = async () => {
         if (!files) return;
 
