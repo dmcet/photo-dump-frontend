@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import HomePage from "./pages/HomePage.tsx";
+import {BrowserRouter, NavLink, Routes, Route} from "react-router-dom";
+import UploadImagePage from "./pages/UploadImagePage.tsx";
+import ViewImagesPage from "./pages/ViewImagesPage.tsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+const Page = {
+    Home: 'Home',
+    UploadImage: 'Upload Image',
+    ViewImages: 'View Images'
+} as const;
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const AppRoutes = {
+    Home: {
+        path: '/',
+        component: HomePage
+    },
+    UploadImage: {
+        path: '/upload',
+        component: UploadImagePage
+    },
+    ViewImages: {
+        path: '/view',
+        component: ViewImagesPage
+    }
+} as const;
+
+
+export default function App() {
+
+    return (
+        <BrowserRouter>
+            <h1 className="m-3">Welcome to PhotoDump</h1>
+            <h2 className="m-3">The only photo upload site you'll need</h2>
+
+            <nav className="nav nav-pills nav-fill m-3">
+                {Object.entries(AppRoutes).map(([name, {path}]) => (
+                    <NavLink
+                        key={path}
+                        to={path}
+                        className={({isActive}) =>
+                            `nav-link m-2 ${isActive ? 'active' : ''}`
+                        }
+                    >
+                        {Page[name as keyof typeof Page]}
+                    </NavLink>
+                ))}
+            </nav>
+
+            <Routes>
+                {Object.values(AppRoutes).map(({path, component: Component}) => (
+                    <Route key={path} path={path} element={<Component/>}/>
+                ))}
+            </Routes>
+
+
+        </BrowserRouter>
+    )
 }
-
-export default App
