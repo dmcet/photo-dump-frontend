@@ -1,4 +1,4 @@
-import {Outlet, NavLink, Route, Routes} from "react-router-dom";
+import {NavLink, Route, Routes} from "react-router-dom";
 import LoginForm from "./LoginForm.tsx";
 import RegisterForm from "./RegisterForm.tsx";
 import {jwtDecode, type JwtPayload} from "jwt-decode";
@@ -117,8 +117,6 @@ function LoginAndRegisterTabBar() {
                 </li>
             ))}
         </ul>
-
-        <Outlet/>
 
         <Routes>
             {Object.values(HomeRoutes).map(({path, component: Component}) => (
