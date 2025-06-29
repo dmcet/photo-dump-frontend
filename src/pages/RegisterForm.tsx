@@ -1,5 +1,6 @@
-import {type FormEvent, useState} from "react";
 import * as React from "react";
+import {type FormEvent, useState} from "react";
+import axios from "axios";
 
 interface RegisterData {
     username: string;
@@ -32,6 +33,20 @@ export default function RegisterForm() {
         e.preventDefault();
         // Handle form submission
         console.log('Form submitted:', registerData);
+        axios({
+            method: 'POST',
+            url: 'http://localhost:8080/api/v1/user/register',
+            data: registerData
+        }).then(
+            response => {
+                console.log('Response:', response);
+                setStatus('Registration successful!');
+            },
+            error => {
+                console.log('Error:', error);
+                setStatus('Registration failed!');
+            }
+        )
     };
 
     const determineButtonClass = () => {
