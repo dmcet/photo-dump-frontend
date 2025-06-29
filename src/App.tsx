@@ -11,7 +11,7 @@ const Page = {
 
 const AppRoutes = {
     Home: {
-        path: '/',
+        path: '/*',
         component: HomePage
     },
     UploadImage: {
