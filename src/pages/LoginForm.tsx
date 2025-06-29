@@ -40,10 +40,13 @@ export default function LoginForm() {
                 setStatus('Login successful!');
                 localStorage.setItem('access_token', response.data.access_token);
                 console.log('Token:', localStorage.getItem('access_token'));
+                // Refresh the page to update authentication state
+                window.location.reload();
             },
             error => {
                 console.log('Error:', error);
-                setStatus('Login failed!');
+                const errorMessage = error.response?.data?.message || 'Login failed!';
+                setStatus(errorMessage);
             }
         )
     }
